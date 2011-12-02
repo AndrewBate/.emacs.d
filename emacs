@@ -1,4 +1,4 @@
-
+(setq inhibit-splash-screen t)
 (setq viper-mode t)
 (require 'viper)
 (add-to-list 'load-path "~/.emacs.d")
