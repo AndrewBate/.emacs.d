@@ -1,2 +1,2 @@
 #! /bin/sh
-emacsclient -c --alternate-editor="$HOME/.emacs.d/start.sh"
+emacsclient -c --alternate-editor="/home/andrew/.emacs.d/emacs-start-server-then-client.sh"
