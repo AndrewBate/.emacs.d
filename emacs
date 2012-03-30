@@ -1,14 +1,22 @@
 (setq inhibit-splash-screen t)
-(setq viper-mode t)
-(require 'viper)
 (add-to-list 'load-path "~/.emacs.d")
-(require 'vimpulse)
+
+(add-to-list 'load-path "~/.emacs.d/el-get/evil")
+(add-to-list 'load-path "~/.emacs.d/el-get/undo-tree")
+(require 'evil)
+(evil-mode 1)
+;; (define-key evil-insert-state-map "C-" 'evil-normal-state) 
+(global-set-key "\C-c\C-c" 'comment-region)
+(global-set-key "\C-c\C-u" 'uncomment-region)
+(define-key evil-normal-state-map ";"  'evil-ex)
+(setq evil-emacs-state-cursor '("red" box))
+(setq evil-insert-state-cursor '("blue" box))
 
 (require 'color-theme)
 (color-theme-initialize)
 (color-theme-gray30)
 
-;(menu-bar-mode 0)
+(menu-bar-mode 1)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (show-paren-mode 1)
@@ -18,8 +26,8 @@
 (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))
 
 
-(set-default-font "Monospace-10")
-(add-to-list 'default-frame-alist '(font . "Monospace-10"))
+(set-default-font "Monospace-9")
+(add-to-list 'default-frame-alist '(font . "Monospace-9"))
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -40,6 +48,18 @@
                        (set-frame-font "Monospace-10")))
 
 
+;; el-get
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get") 
+(unless (require 'el-get nil t) 
+  (url-retrieve "https://raw.github.com/dimitri/el-get/master/el-get-install.el" 
+                (lambda (s) (end-of-buffer) (eval-print-last-sexp))))
+
+;; C, C++
+(setq c-default-style "k&r" 
+      c-basic-offset 4)
+(setq gdb-many-windows t)
+              
+
 ;; General editing
 (setq-default indent-tabs-mode nil)
 (global-linum-mode 1)
@@ -47,41 +67,12 @@
 (setq browse-url-generic-program "/opt/google/chrome/google-chrome")
 
 ;; git
-(add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
-(require 'magit)
-(global-set-key "\C-c\g" 'magit-status)
+;(add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
+;(require 'magit)
+;(global-set-key "\C-c\g" 'magit-status)
 
 
 
 
 
 
-
-(custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(tuareg-begin-indent 4)
- '(tuareg-default-indent 4)
- '(tuareg-do-indent 4)
- '(tuareg-for-while-indent 4)
- '(tuareg-fun-indent 4)
- '(tuareg-function-indent 4)
- '(tuareg-if-then-else-indent 4)
- '(tuareg-indent-comments t)
- '(tuareg-let-indent 4)
- '(tuareg-match-indent 4)
- '(tuareg-method-indent 4)
- '(tuareg-rule-indent 4)
- '(tuareg-sig-struct-indent 4)
- '(tuareg-try-indent 4)
- '(tuareg-type-indent 4)
- '(tuareg-val-indent 4)
- '(tuareg-with-indent 4))
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- )
