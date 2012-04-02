@@ -10,11 +10,12 @@
 (global-set-key "\C-c\C-u" 'uncomment-region)
 (define-key evil-normal-state-map ";"  'evil-ex)
 (setq evil-emacs-state-cursor '("red" box))
+(setq evil-normal-state-cursor '("green" box))
 (setq evil-insert-state-cursor '("blue" box))
 
 (require 'color-theme)
 (color-theme-initialize)
-(color-theme-gray30)
+(color-theme-charcoal-black)
 
 (menu-bar-mode 1)
 (tool-bar-mode 0)
@@ -67,9 +68,9 @@
 (setq browse-url-generic-program "/opt/google/chrome/google-chrome")
 
 ;; git
-;(add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
-;(require 'magit)
-;(global-set-key "\C-c\g" 'magit-status)
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
+(require 'magit)
+(global-set-key "\C-c\g" 'magit-status)
 
 
 
