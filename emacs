@@ -1,8 +1,8 @@
 (setq inhibit-splash-screen t)
 (add-to-list 'load-path "~/.emacs.d")
 
-(add-to-list 'load-path "~/.emacs.d/el-get/evil")
-(add-to-list 'load-path "~/.emacs.d/el-get/undo-tree")
+(add-to-list 'load-path "~/.emacs.d/manual/evil")
+(add-to-list 'load-path "~/.emacs.d/manual")
 (require 'evil)
 (evil-mode 1)
 ;; (define-key evil-insert-state-map "C-" 'evil-normal-state) 
@@ -26,8 +26,8 @@
 (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))
 
 
-(set-default-font "Monospace-9")
-(add-to-list 'default-frame-alist '(font . "Monospace-9"))
+(set-default-font "Monospace-10")
+(add-to-list 'default-frame-alist '(font . "Monospace-10"))
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -37,15 +37,15 @@
 (global-set-key "\C-c\C-t" 'ansi-term)
 (global-set-key "\C-x\C-x" 'delete-frame)
 
-(global-set-key [f8] (lambda ()
-                       (interactive)
-                       (set-frame-font "Monospace-8")))
 (global-set-key [f9] (lambda ()
                        (interactive)
                        (set-frame-font "Monospace-9")))
 (global-set-key [f10] (lambda ()
                        (interactive)
                        (set-frame-font "Monospace-10")))
+(global-set-key [f11] (lambda ()
+                       (interactive)
+                       (set-frame-font "Monospace-11")))
 
 
 ;; el-get
