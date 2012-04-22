@@ -37,6 +37,7 @@
 (global-set-key "\C-x\a" 'align-string)
 (global-set-key "\C-c\C-t" 'ansi-term)
 (global-set-key "\C-x\C-x" 'delete-frame)
+(global-set-key [f5] 'redraw-display)
 
 (global-set-key [f9] (lambda ()
                        (interactive)
