@@ -3,6 +3,8 @@
 
 (add-to-list 'load-path "~/.emacs.d/manual/evil")
 (add-to-list 'load-path "~/.emacs.d/manual")
+(add-to-list 'load-path "~/.emacs.d/el-get/evil")
+(add-to-list 'load-path "~/.emacs.d/el-get/undo-tree")
 (require 'evil)
 (evil-mode 1)
 ;; (define-key evil-insert-state-map "C-" 'evil-normal-state) 
