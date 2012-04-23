@@ -41,6 +41,10 @@
 (global-set-key "\C-x\C-x" 'delete-frame)
 (global-set-key [f5] 'redraw-display)
 
+(global-set-key [f7] 'delete-trailing-whitespace)
+(global-set-key [f8] (lambda ()
+                       (interactive)
+                       (set-frame-font "Monospace-8")))
 (global-set-key [f9] (lambda ()
                        (interactive)
                        (set-frame-font "Monospace-9")))
