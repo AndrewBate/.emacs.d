@@ -29,8 +29,8 @@
 (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))
 
 
-(set-default-font "Monospace-10")
-(add-to-list 'default-frame-alist '(font . "Monospace-10"))
+(set-default-font "Monospace-8")
+(add-to-list 'default-frame-alist '(font . "Monospace-8"))
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -57,16 +57,16 @@
 
 
 ;; el-get
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get") 
-(unless (require 'el-get nil t) 
-  (url-retrieve "https://raw.github.com/dimitri/el-get/master/el-get-install.el" 
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+(unless (require 'el-get nil t)
+  (url-retrieve "https://raw.github.com/dimitri/el-get/master/el-get-install.el"
                 (lambda (s) (end-of-buffer) (eval-print-last-sexp))))
 
 ;; C, C++
-(setq c-default-style "k&r" 
+(setq c-default-style "k&r"
       c-basic-offset 4)
 (setq gdb-many-windows t)
-              
+
 ;; asm
 (setq tab-stop-list (quote (4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100 104 108 112 116 120)))
 (setq asm-comment-char ?#)
@@ -83,7 +83,28 @@
 (global-set-key "\C-c\g" 'magit-status)
 
 
+;; compiling
+(defun compile-go-away (buf str)
+    ;; No errors, make the window go away
+   (run-at-time 1 nil
+                (lambda (buf)
+                  (delete-windows-on buf)
+                  (bury-buffer buf)
+                  (if (string-match "exited abnormally" str)
+                      (message "Compilation errors, press C-x ` to visit")
+                    (message "Compilation successful!"))
+                  ) buf)
+  (message "Compilation successful!"))
+(setq compilation-finish-function 'compile-go-away)
 
+;; closing
+(defun ask-before-closing ()
+  "Ask whether or not to close, and then close if y was pressed"
+  (interactive)
+  (if (y-or-n-p (format "Are you sure you want to exit Emacs? "))
+      (delete-frame)
+    (message "Canceled exit")))
 
-
+(global-set-key (kbd "C-x C-c") 'ask-before-closing)
+(global-set-key (kbd "C-x C-x") 'ask-before-closing)
 
