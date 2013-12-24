@@ -1,13 +1,21 @@
 (setq inhibit-splash-screen t)
-(add-to-list 'load-path "~/.emacs.d")
+;; el-get
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+(unless (require 'el-get nil t)
+  (url-retrieve "https://raw.github.com/dimitri/el-get/master/el-get-install.el"
+                (lambda (s) (end-of-buffer) (eval-print-last-sexp))))
 
-(add-to-list 'load-path "~/.emacs.d/manual/evil")
-(add-to-list 'load-path "~/.emacs.d/manual")
-(add-to-list 'load-path "~/.emacs.d/el-get/evil")
-(add-to-list 'load-path "~/.emacs.d/el-get/undo-tree")
+(setq
+ el-get-sources
+ '(el-get
+   evil
+   ))
+(el-get 'sync el-get-sources)
+
+
 (require 'evil)
 (evil-mode 1)
-;; (define-key evil-insert-state-map "C-" 'evil-normal-state) 
+;; (define-key evil-insert-state-map "C-" 'evil-normal-state)
 (global-set-key "\C-c\C-c" 'comment-region)
 (global-set-key "\C-c\C-u" 'uncomment-region)
 (define-key evil-normal-state-map ";"  'evil-ex)
@@ -15,9 +23,11 @@
 (setq evil-normal-state-cursor '("green" box))
 (setq evil-insert-state-cursor '("blue" box))
 
+
 (require 'color-theme)
 (color-theme-initialize)
-(color-theme-charcoal-black)
+(color-theme-calm-forest)
+
 
 (menu-bar-mode 1)
 (tool-bar-mode 0)
@@ -56,11 +66,6 @@
                        (set-frame-font "Monospace-11")))
 
 
-;; el-get
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-(unless (require 'el-get nil t)
-  (url-retrieve "https://raw.github.com/dimitri/el-get/master/el-get-install.el"
-                (lambda (s) (end-of-buffer) (eval-print-last-sexp))))
 
 ;; C, C++
 (setq c-default-style "k&r"
@@ -78,24 +83,10 @@
 (setq browse-url-generic-program "/opt/google/chrome/google-chrome")
 
 ;; git
-(add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
 (require 'magit)
 (global-set-key "\C-c\g" 'magit-status)
 
 
-;; compiling
-(defun compile-go-away (buf str)
-    ;; No errors, make the window go away
-   (run-at-time 1 nil
-                (lambda (buf)
-                  (delete-windows-on buf)
-                  (bury-buffer buf)
-                  (if (string-match "exited abnormally" str)
-                      (message "Compilation errors, press C-x ` to visit")
-                    (message "Compilation successful!"))
-                  ) buf)
-  (message "Compilation successful!"))
-(setq compilation-finish-function 'compile-go-away)
 
 ;; closing
 (defun ask-before-closing ()
@@ -107,4 +98,3 @@
 
 (global-set-key (kbd "C-x C-c") 'ask-before-closing)
 (global-set-key (kbd "C-x C-x") 'ask-before-closing)
-
