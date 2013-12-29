@@ -66,6 +66,14 @@
                        (set-frame-font "Monospace-11")))
 
 
+;; Haskell
+(add-to-list 'load-path "~/.cabal/share/ghc-mod-3.1.4")
+(add-to-list 'exec-path "~/.cabal/bin")
+(autoload 'ghc-init "ghc" nil t)
+(add-hook 'haskell-mode-hook (lambda ()
+                               (ghc-init)
+                               (flymake-mode)))
+
 
 ;; C, C++
 (setq c-default-style "k&r"
@@ -80,7 +88,7 @@
 (setq-default indent-tabs-mode nil)
 (global-linum-mode 1)
 (setq browse-url-browser-function 'browse-url-generic)
-(setq browse-url-generic-program "/opt/google/chrome/google-chrome")
+(setq browse-url-generic-program "/usr/bin/google-chrome")
 
 ;; git
 (require 'magit)
