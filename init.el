@@ -11,6 +11,7 @@
  '(el-get
    evil
    key-chord
+   magit
    ))
 (el-get 'sync el-get-sources)
 
@@ -20,6 +21,10 @@
 
 (global-set-key "\C-c\C-c" 'comment-region)
 (global-set-key "\C-c\C-u" 'uncomment-region)
+
+(define-key evil-normal-state-map "t" 'find-tag)
+(define-key evil-normal-state-map "T" 'pop-tag-mark)
+
 (define-key evil-normal-state-map ";"  'evil-ex)
 (setq evil-emacs-state-cursor '("red" box))
 (setq evil-normal-state-cursor '("green" box))
@@ -34,7 +39,7 @@
 (color-theme-calm-forest)
 
 
-(menu-bar-mode 1)
+(menu-bar-mode 0)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (show-paren-mode 1)
@@ -84,6 +89,28 @@
 (setq c-default-style "k&r"
       c-basic-offset 4)
 (setq gdb-many-windows t)
+(add-to-list 'auto-mode-alist '("\\.inl\\'" . c-mode))
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            (c-set-offset 'case-label '+)))
+
+(defun includeguard-sym-name ()
+  (concat
+   (replace-regexp-in-string
+    "[\\.-]" "_"
+    (upcase (file-name-nondirectory (buffer-file-name))))
+   "_INCLUDED"))
+
+(defun includeguard-generate () (interactive)
+  (let ((ig-sym (includeguard-sym-name)))
+    (beginning-of-buffer)
+    (insert "#ifndef " ig-sym "\n")
+    (insert "#define " ig-sym "\n\n")
+    (end-of-buffer)
+    (insert "\n#endif /* " ig-sym " */\n")))
+
+(global-set-key [f12] 'includeguard-generate)
+
 
 ;; asm
 (setq tab-stop-list (quote (4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100 104 108 112 116 120)))
