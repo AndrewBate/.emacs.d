@@ -3,25 +3,30 @@
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 (unless (require 'el-get nil t)
   (url-retrieve "https://raw.github.com/dimitri/el-get/master/el-get-install.el"
-                (lambda (s) (end-of-buffer) (eval-print-last-sexp))))
+                (lambda (s) (end-of-buffer) (eval-print-last-sexp)))
+  (require 'el-get))
 
 (setq
  el-get-sources
  '(el-get
    evil
+   key-chord
    ))
 (el-get 'sync el-get-sources)
 
 
 (require 'evil)
 (evil-mode 1)
-;; (define-key evil-insert-state-map "C-" 'evil-normal-state)
+
 (global-set-key "\C-c\C-c" 'comment-region)
 (global-set-key "\C-c\C-u" 'uncomment-region)
 (define-key evil-normal-state-map ";"  'evil-ex)
 (setq evil-emacs-state-cursor '("red" box))
 (setq evil-normal-state-cursor '("green" box))
 (setq evil-insert-state-cursor '("blue" box))
+
+(key-chord-mode 1)
+(key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
 
 
 (require 'color-theme)
