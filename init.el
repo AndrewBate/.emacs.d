@@ -12,6 +12,7 @@
    evil
    key-chord
    magit
+   markdown-mode
    ))
 (el-get 'sync el-get-sources)
 
