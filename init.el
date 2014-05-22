@@ -33,6 +33,7 @@
 
 (key-chord-mode 1)
 (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
+(key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
 
 
 (require 'color-theme)
@@ -78,13 +79,10 @@
 
 
 ;; Haskell
-(add-to-list 'load-path "~/.cabal/share/ghc-mod-3.1.4")
-(add-to-list 'exec-path "~/.cabal/bin")
-(autoload 'ghc-init "ghc" nil t)
-(add-hook 'haskell-mode-hook (lambda ()
-                               (ghc-init)
-                               (flymake-mode)))
-
+;(autoload 'ghc-init "ghc" nil t)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-doc)
+;(add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
 
 ;; C, C++
 (setq c-default-style "k&r"
