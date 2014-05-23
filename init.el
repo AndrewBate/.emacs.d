@@ -32,8 +32,10 @@
 (setq evil-insert-state-cursor '("blue" box))
 
 (key-chord-mode 1)
-(key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
 (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
+(key-chord-define evil-visual-state-map "jk" 'evil-normal-state)
+(key-chord-define evil-visual-state-map "cv" 'comment-region)
+(key-chord-define evil-visual-state-map "ui" 'uncomment-region)
 
 
 (require 'color-theme)
