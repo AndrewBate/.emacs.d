@@ -1,22 +1,36 @@
 (setq inhibit-splash-screen t)
-;; el-get
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-(unless (require 'el-get nil t)
-  (url-retrieve "https://raw.github.com/dimitri/el-get/master/el-get-install.el"
-                (lambda (s) (end-of-buffer) (eval-print-last-sexp)))
-  (require 'el-get))
 
-(setq
- el-get-sources
- '(el-get
-   evil
-   key-chord
-   magit
-   markdown-mode
-   ))
-(el-get 'sync el-get-sources)
+(require 'package)
+(require 'cl)
+;; Packages -------------------------------
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(package-initialize)
+
+(defvar prelude-packages
+  '(evil markdown-mode)
+  "A list of packages to ensure are installed at launch.")
+
+(defun prelude-packages-installed-p ()
+  (loop for p in prelude-packages
+        when (not (package-installed-p p)) do (return nil)
+        finally (return t)))
+
+(unless (prelude-packages-installed-p)
+  ;; check for new packages (package versions)
+  (message "%s" "Emacs Prelude is now refreshing its package database...")
+  (package-refresh-contents)
+  (message "%s" " done.")
+  ;; install the missing packages
+  (dolist (p prelude-packages)
+    (when (not (package-installed-p p))
+      (package-install p))))
+
+;; Local installs
+(add-to-list 'load-path "~/.emacs.d/from-web/key-chord-mode")
 
 
+;; evil --------------------------------------------------
 (require 'evil)
 (evil-mode 1)
 
@@ -31,6 +45,7 @@
 (setq evil-normal-state-cursor '("green" box))
 (setq evil-insert-state-cursor '("blue" box))
 
+(require 'key-chord)
 (key-chord-mode 1)
 (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
 (key-chord-define evil-visual-state-map "jk" 'evil-normal-state)
@@ -40,8 +55,9 @@
 
 (require 'color-theme)
 (color-theme-initialize)
-(color-theme-calm-forest)
-
+(if (window-system)
+    (color-theme-calm-forest)
+  (color-theme-charcoal-black))
 
 (menu-bar-mode 0)
 (tool-bar-mode 0)
@@ -124,8 +140,8 @@
 (setq browse-url-generic-program "/usr/bin/google-chrome")
 
 ;; git
-(require 'magit)
-(global-set-key "\C-c\g" 'magit-status)
+;(require 'magit)
+;(global-set-key "\C-c\g" 'magit-status)
 
 
 
