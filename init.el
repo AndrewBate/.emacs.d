@@ -8,7 +8,11 @@
 (package-initialize)
 
 (defvar prelude-packages
-  '(evil markdown-mode)
+  '(evil
+    markdown-mode
+    color-theme
+    haskell-mode
+    )
   "A list of packages to ensure are installed at launch.")
 
 (defun prelude-packages-installed-p ()
@@ -53,11 +57,17 @@
 (key-chord-define evil-visual-state-map "ui" 'uncomment-region)
 
 
+;; color theme
 (require 'color-theme)
 (color-theme-initialize)
-(if (window-system)
-    (color-theme-calm-forest)
-  (color-theme-charcoal-black))
+(color-theme-dark-laptop)
+(if(daemonp)
+    (add-hook 'after-make-frame-functions
+              (lambda (f)
+                (with-selected-frame f
+                  (if (window-system f)
+                      (color-theme-dark-laptop))))))
+
 
 (menu-bar-mode 0)
 (tool-bar-mode 0)
@@ -82,25 +92,35 @@
 (global-set-key [f5] 'redraw-display)
 
 (global-set-key [f7] 'delete-trailing-whitespace)
-(global-set-key [f8] (lambda ()
-                       (interactive)
-                       (set-frame-font "Monospace-8")))
-(global-set-key [f9] (lambda ()
-                       (interactive)
-                       (set-frame-font "Monospace-9")))
-(global-set-key [f10] (lambda ()
-                       (interactive)
-                       (set-frame-font "Monospace-10")))
-(global-set-key [f11] (lambda ()
-                       (interactive)
-                       (set-frame-font "Monospace-11")))
+
 
 
 ;; Haskell
-;(autoload 'ghc-init "ghc" nil t)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-doc)
-;(add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
+
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+(add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+
+(setq haskell-process-log t)
+(setq haskell-process-type 'ghci)
+
+(define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
+(define-key haskell-mode-map (kbd "C-`") 'haskell-interactive-bring)
+(define-key haskell-mode-map (kbd "C-c C-t") 'haskell-process-do-type)
+(define-key haskell-mode-map (kbd "C-c C-i") 'haskell-process-do-info)
+(define-key haskell-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
+(define-key haskell-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
+(define-key haskell-mode-map (kbd "C-c c") 'haskell-process-cabal)
+(define-key haskell-mode-map (kbd "SPC") 'haskell-mode-contextual-space)
+(define-key haskell-mode-map (kbd "M-.") 'haskell-mode-jump-to-def)
+
+
+(define-key haskell-mode-map [f8] 'haskell-navigate-imports)
+
+
+;; this was old haskellmode install (check whether it is needed)
+;(autoload 'ghc-init "ghc" nil t)
+;(add-hook 'haskell-mode-hook 'turn-on-haskell-doc)
+;(add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
 
 ;; C, C++
 (setq c-default-style "k&r"
