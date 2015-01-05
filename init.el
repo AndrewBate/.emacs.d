@@ -12,6 +12,7 @@
     markdown-mode
     color-theme
     haskell-mode
+    x-cscope
     )
   "A list of packages to ensure are installed at launch.")
 
@@ -147,6 +148,10 @@
     (insert "\n#endif /* " ig-sym " */\n")))
 
 (global-set-key [f12] 'includeguard-generate)
+
+;xcscope
+(require 'xcscope)
+(cscope-setup)
 
 
 ;; asm
