@@ -12,7 +12,7 @@
     markdown-mode
     color-theme
     haskell-mode
-    x-cscope
+    xcscope
     )
   "A list of packages to ensure are installed at launch.")
 
