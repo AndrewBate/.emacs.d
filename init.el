@@ -12,6 +12,7 @@
     markdown-mode
     color-theme
     haskell-mode
+    hindent
     xcscope
     )
   "A list of packages to ensure are installed at launch.")
@@ -33,7 +34,6 @@
 
 ;; Local installs
 (add-to-list 'load-path "~/.emacs.d/from-web/key-chord-mode")
-
 
 ;; evil --------------------------------------------------
 (require 'evil)
@@ -58,7 +58,7 @@
 (key-chord-define evil-visual-state-map "ui" 'uncomment-region)
 
 
-;; color theme
+;; color theme -----------------------------------------------------
 (require 'color-theme)
 (color-theme-initialize)
 (color-theme-dark-laptop)
@@ -68,12 +68,17 @@
                 (with-selected-frame f
                   (if (window-system f)
                       (color-theme-dark-laptop))))))
-
+;; -------------------------------------------------------------------
 
 (menu-bar-mode 0)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (show-paren-mode 1)
+
+(setq-default indent-tabs-mode nil)
+(global-linum-mode 1)
+(setq browse-url-browser-function 'browse-url-generic)
+(setq browse-url-generic-program "/usr/bin/google-chrome")
 
 (require 'dired-x)
 (setq dired-omit-files "^\\...+$")
@@ -94,8 +99,18 @@
 
 (global-set-key [f7] 'delete-trailing-whitespace)
 
+;; closing
+(defun ask-before-closing ()
+  "Ask whether or not to close, and then close if y was pressed"
+  (interactive)
+  (if (y-or-n-p (format "Are you sure you want to exit Emacs? "))
+      (delete-frame)
+    (message "Canceled exit")))
 
-;; C, C++
+(global-set-key (kbd "C-x C-c") 'ask-before-closing)
+(global-set-key (kbd "C-x C-x") 'ask-before-closing)
+
+;; C, C++ --------------------------------------------------------------------------------
 (setq c-default-style "k&r"
       c-basic-offset 4)
 (setq gdb-many-windows t)
@@ -125,30 +140,45 @@
 (require 'xcscope)
 (cscope-setup)
 
-
 ;; asm
 (setq tab-stop-list (quote (4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100 104 108 112 116 120)))
 (setq asm-comment-char ?#)
 
-;; General editing
-(setq-default indent-tabs-mode nil)
-(global-linum-mode 1)
-(setq browse-url-browser-function 'browse-url-generic)
-(setq browse-url-generic-program "/usr/bin/google-chrome")
+;; Haskell ---------------------------------------------------------------------------
+;(add-hook 'haskell-mode-hook #'hindent)
+(require 'haskell-mode)
 
-;; git
-;(require 'magit)
-;(global-set-key "\C-c\g" 'magit-status)
+(custom-set-variables
+ '(haskell-process-suggest-remove-import-lines t)
+ '(haskell-process-auto-import-loaded-modules t)
+ '(haskell-process-log t)
+ '(haskell-process-suggest-remove-import-lines t)
+ '(haskell-process-type 'cabal-repl))
+
+(eval-after-load 'haskell-mode '(progn
+  (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
+  (define-key haskell-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
+  (define-key haskell-mode-map (kbd "C-c C-n C-t") 'haskell-process-do-type)
+  (define-key haskell-mode-map (kbd "C-c C-n C-i") 'haskell-process-do-info)
+  (define-key haskell-mode-map (kbd "C-c C-n C-c") 'haskell-process-cabal-build)
+  (define-key haskell-mode-map (kbd "C-c C-n c") 'haskell-process-cabal)))
+
+(eval-after-load 'haskell-cabal '(progn
+  (define-key haskell-cabal-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
+  (define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
+  (define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
+  (define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)))
 
 
+(custom-set-variables '(haskell-tags-on-save t))
 
-;; closing
-(defun ask-before-closing ()
-  "Ask whether or not to close, and then close if y was pressed"
-  (interactive)
-  (if (y-or-n-p (format "Are you sure you want to exit Emacs? "))
-      (delete-frame)
-    (message "Canceled exit")))
+; ghc-mod
+(add-to-list 'load-path "~/.cabal/share/x86_64-linux-ghc-8.0.2/ghc-mod-5.8.0.0/elisp/")
+(let ((my-cabal-path (expand-file-name "~/.cabal/bin")))
+  (setenv "PATH" (concat my-cabal-path ":" (getenv "PATH")))
+  (add-to-list 'exec-path my-cabal-path))
+(require 'ghc)
+(autoload 'ghc-init "ghc" nil t)
+(autoload 'ghc-debug "ghc" nil t)
+(add-hook 'haskell-mode-hook (lambda () (ghc-init)))
 
-(global-set-key (kbd "C-x C-c") 'ask-before-closing)
-(global-set-key (kbd "C-x C-x") 'ask-before-closing)
