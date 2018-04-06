@@ -52,10 +52,13 @@
 (setq evil-normal-state-cursor '("green" box))
 (setq evil-insert-state-cursor '("blue" box))
 
+
 (require 'key-chord)
 (key-chord-mode 1)
 (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
 (key-chord-define evil-visual-state-map "jk" 'evil-normal-state)
+(key-chord-define evil-insert-state-map "JK" 'evil-normal-state)
+(key-chord-define evil-visual-state-map "JK" 'evil-normal-state)
 (key-chord-define evil-visual-state-map "cv" 'comment-region)
 (key-chord-define evil-visual-state-map "ui" 'uncomment-region)
 
@@ -186,6 +189,11 @@
 
 ;; intero
 (add-hook 'haskell-mode-hook 'intero-mode)
+(eval-after-load 'haskell-mode
+  '(progn
+     (define-key haskell-mode-map (kbd "M-t") '(lambda () "" (interactive)
+                                                 (intero-type-at t)))))
+
 
 
 (custom-set-faces
